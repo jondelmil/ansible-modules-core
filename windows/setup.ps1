@@ -114,7 +114,12 @@ Set-Attr $result.ansible_facts "ansible_distribution_version" $osversion.Version
 Set-Attr $result.ansible_facts "ansible_distribution_major_version" $osversion.Version.Major.ToString()
 Set-Attr $result.ansible_facts "ansible_kernel" $osversion.Version.ToString()
 
-Set-Attr $result.ansible_facts "ansible_machine_id" $user.User.AccountDomainSid.Value
+Try {
+    Set-Attr $result.ansible_facts "ansible_machine_id" $user.User.AccountDomainSid.Value
+}
+Catch {
+    Set-Attr $result.ansible_facts "ansible_machine_id" ""
+}
 Set-Attr $result.ansible_facts "ansible_domain" $ip_props.DomainName
 Set-Attr $result.ansible_facts "ansible_nodename" ($ip_props.HostName + "." + $ip_props.DomainName)
 Set-Attr $result.ansible_facts "ansible_windows_domain" $win32_cs.Domain
